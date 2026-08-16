@@ -1,0 +1,5 @@
+# এই ফাইলগুলো GitHub এ আপলোড হবে না (API key যেন leak না হয়)
+.env
+__pycache__/
+*.pyc
+server.log
