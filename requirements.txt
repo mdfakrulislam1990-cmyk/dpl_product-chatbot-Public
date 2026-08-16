@@ -1,6 +1,0 @@
-flask
-pandas
-openpyxl
-fuzzywuzzy
-python-Levenshtein
-gunicorn
