@@ -116,6 +116,16 @@ e<!DOCTYPE html>
     background: #4f46e5;
     color: #fff;
   }
+  .suggestion-btn.suggestion-used {
+    background: #f4f5f7;
+    border-color: #d1d5db;
+    color: #9ca3af;
+    cursor: default;
+  }
+  .suggestion-btn.suggestion-used:hover {
+    background: #f4f5f7;
+    color: #9ca3af;
+  }
 </style>
 </head>
 <body>
@@ -125,11 +135,11 @@ e<!DOCTYPE html>
   <div class="chat-messages" id="messages">
     <div class="msg bot">👋 আসসালামু আলাইকুম! আমি Delta Care Agent আমি আপনাকে প্রোডাক্টের দাম, স্টক ও বিস্তারিত জানাতে সাহায্য করতে পারি। কোন প্রোডাক্ট সম্পর্কে জানতে চান?</div>
     <div class="suggestions" id="suggestions">
-      <button class="suggestion-btn" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস কি?')">১। রিউমাটয়েড আর্থ্রাইটিস কি?</button>
-      <button class="suggestion-btn" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস হওয়ার কারনগুলো কি কি?')">২। রিউমাটয়েড আর্থ্রাইটিস হওয়ার কারনগুলো কি কি?</button>
-      <button class="suggestion-btn" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস এর লক্ষণ ও উপসর্গ গুলো কি কি?')">৩। রিউমাটয়েড আর্থ্রাইটিস এর লক্ষণ ও উপসর্গ গুলো কি কি?</button>
-      <button class="suggestion-btn" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস এর চিকিৎসা কিভাবে করতে হয়?')">৪। রিউমাটয়েড আর্থ্রাইটিস এর চিকিৎসা কিভাবে করতে হয়?</button>
-      <button class="suggestion-btn" onclick="sendSuggestion('কিভাবে আমি রিউমাটয়েড আর্থ্রাইটিস নিয়ন্ত্রণ ও জীবনযাত্রার মান উন্নত করতে পারি?')">৫। কিভাবে আমি রিউমাটয়েড আর্থ্রাইটিস নিয়ন্ত্রণ ও জীবনযাত্রার মান উন্নত করতে পারি?</button>
+      <button class="suggestion-btn" id="sugg1" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস কি?', 'sugg1')">১। রিউমাটয়েড আর্থ্রাইটিস কি?</button>
+      <button class="suggestion-btn" id="sugg2" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস হওয়ার কারনগুলো কি কি?', 'sugg2')">২। রিউমাটয়েড আর্থ্রাইটিস হওয়ার কারনগুলো কি কি?</button>
+      <button class="suggestion-btn" id="sugg3" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস এর লক্ষণ ও উপসর্গ গুলো কি কি?', 'sugg3')">৩। রিউমাটয়েড আর্থ্রাইটিস এর লক্ষণ ও উপসর্গ গুলো কি কি?</button>
+      <button class="suggestion-btn" id="sugg4" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস এর চিকিৎসা কিভাবে করতে হয়?', 'sugg4')">৪। রিউমাটয়েড আর্থ্রাইটিস এর চিকিৎসা কিভাবে করতে হয়?</button>
+      <button class="suggestion-btn" id="sugg5" onclick="sendSuggestion('কিভাবে আমি রিউমাটয়েড আর্থ্রাইটিস নিয়ন্ত্রণ ও জীবনযাত্রার মান উন্নত করতে পারি?', 'sugg5')">৫। কিভাবে আমি রিউমাটয়েড আর্থ্রাইটিস নিয়ন্ত্রণ ও জীবনযাত্রার মান উন্নত করতে পারি?</button>
     </div>
   </div>
   <div class="typing" id="typing" style="display:none;">বট লিখছে...</div>
@@ -144,10 +154,15 @@ e<!DOCTYPE html>
 // (যেমন: "ওটার দাম কত?" জিজ্ঞেস করলে "ওটা" বলতে কোন প্রোডাক্ট বোঝাচ্ছে বুঝবে)
 let conversationHistory = [];
 
-function sendSuggestion(question) {
-  // প্রশ্ন বাটনগুলো একবার ব্যবহারের পর লুকিয়ে ফেলা হচ্ছে
-  const suggestions = document.getElementById("suggestions");
-  if (suggestions) suggestions.style.display = "none";
+function sendSuggestion(question, btnId) {
+  // শুধু যেই প্রশ্নে ক্লিক করা হলো, সেটাকেই disable/grey out করা হচ্ছে
+  // বাকি প্রশ্নগুলো এবং পুরো লিস্ট দৃশ্যমান থাকবে, যাতে কাস্টমার
+  // একটার পর একটা প্রশ্ন দেখে ক্লিক করতে পারে
+  const btn = document.getElementById(btnId);
+  if (btn) {
+    btn.disabled = true;
+    btn.classList.add("suggestion-used");
+  }
 
   document.getElementById("userInput").value = question;
   sendMessage();
@@ -157,9 +172,6 @@ async function sendMessage() {
   const input = document.getElementById("userInput");
   const text = input.value.trim();
   if (!text) return;
-
-  const suggestions = document.getElementById("suggestions");
-  if (suggestions) suggestions.style.display = "none";
 
   addMessage(text, "user");
   input.value = "";
