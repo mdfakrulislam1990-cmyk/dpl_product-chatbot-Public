@@ -226,11 +226,6 @@ def home():
 
 
 
-from flask import send_from_directory
-
-@app.route('/logo')
-def serve_logo():
-    return send_from_directory('templates', 'delta.jpg')
 
 
 
