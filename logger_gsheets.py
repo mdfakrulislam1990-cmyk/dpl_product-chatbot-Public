@@ -17,6 +17,7 @@ Google Sheet এর নাম হতে হবে ঠিক: "Delta Care Chat Lo
 import os
 import json
 import threading
+import traceback
 from datetime import datetime
 
 import gspread
@@ -66,7 +67,9 @@ def _write_row(question: str, answer: str, user_ip: str):
             ws.append_row([timestamp, question, answer, user_ip])
     except Exception as e:
         # লগিং ফেইল করলেও যেন মূল চ্যাটবট চলতে থাকে, তাই এখানে শুধু print করা হচ্ছে
+        # (ডিবাগিং এর জন্য সাময়িকভাবে পুরো traceback দেখানো হচ্ছে)
         print(f"⚠️ Google Sheets এ লগ সেভ করা যায়নি: {e}")
+        traceback.print_exc()
 
 
 def log_chat_async(question: str, answer: str, user_ip: str = ""):
