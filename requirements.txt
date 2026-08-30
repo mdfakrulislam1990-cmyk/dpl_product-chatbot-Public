@@ -5,3 +5,5 @@ cohere
 python-dotenv
 gunicorn
 waitress
+gspread
+google-auth
