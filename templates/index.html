@@ -1,9 +1,9 @@
-e<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>প্রোডাক্ট চ্যাটবট</title>
+<title>Delta Care - AI Agent</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -30,15 +30,41 @@ e<!DOCTYPE html>
   .chat-header {
     background: #4f46e5;
     color: #fff;
-    padding: 18px 20px;
+    padding: 14px 20px;
     font-size: 18px;
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+  }
+  .chat-header img.logo {
+    height: 38px;
+    width: 38px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #fff;
+    flex-shrink: 0;
+  }
+  .chat-header .title-block {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+  }
+  .chat-header .title-block .brand {
+    font-size: 17px;
+    font-weight: 700;
+  }
+  .chat-header .title-block .subtitle {
+    font-size: 12px;
+    font-weight: 400;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    gap: 5px;
   }
   .chat-header span.dot {
-    width: 10px; height: 10px; background: #4ade80; border-radius: 50%;
+    width: 8px; height: 8px; background: #4ade80; border-radius: 50%;
+    display: inline-block;
   }
   .chat-messages {
     flex: 1;
@@ -94,70 +120,24 @@ e<!DOCTYPE html>
   }
   .chat-input button:hover { background: #4338ca; }
   .typing { font-size: 13px; color: #888; padding: 4px 16px; }
-  .suggestions {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin: 4px 0 12px 0;
-    max-width: 90%;
-  }
-  .suggestion-btn {
-    background: #fff;
-    border: 1px solid #4f46e5;
-    color: #4f46e5;
-    border-radius: 14px;
-    padding: 9px 14px;
-    font-size: 13.5px;
-    text-align: left;
-    cursor: pointer;
-    line-height: 1.4;
-  }
-  .suggestion-btn:hover {
-    background: #4f46e5;
-    color: #fff;
-  }
-  .suggestion-btn.suggestion-used {
-    background: #f4f5f7;
-    border-color: #d1d5db;
-    color: #9ca3af;
-    cursor: default;
-  }
-  .suggestion-btn.suggestion-used:hover {
-    background: #f4f5f7;
-    color: #9ca3af;
-  }
 </style>
 </head>
 <body>
 
 <div class="chat-container">
-
- 
-
-
- <div class="chat-header">
-  <img src="/logo" alt="Delta Care Logo" style="width:32px;height:32px;border-radius:50%;object-fit:cover;">
-  Delta Care - AI Agent
-  <span class="dot"></span>
-</div>
-
- 
- 
- 
- 
- <div class="chat-messages" id="messages">
-    <div class="msg bot">👋 আসসালামু আলাইকুম! আমি Delta Care Agent আমি আপনাকে প্রোডাক্টের দাম, স্টক ও বিস্তারিত জানাতে সাহায্য করতে পারি। কোন প্রোডাক্ট সম্পর্কে জানতে চান?</div>
-    <div class="suggestions" id="suggestions">
-      <button class="suggestion-btn" id="sugg1" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস কি?', 'sugg1')">১। রিউমাটয়েড আর্থ্রাইটিস কি?</button>
-      <button class="suggestion-btn" id="sugg2" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস হওয়ার কারনগুলো কি কি?', 'sugg2')">২। রিউমাটয়েড আর্থ্রাইটিস হওয়ার কারনগুলো কি কি?</button>
-      <button class="suggestion-btn" id="sugg3" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস এর লক্ষণ ও উপসর্গ গুলো কি কি?', 'sugg3')">৩। রিউমাটয়েড আর্থ্রাইটিস এর লক্ষণ ও উপসর্গ গুলো কি কি?</button>
-      <button class="suggestion-btn" id="sugg4" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস এর চিকিৎসা কিভাবে করতে হয়?', 'sugg4')">৪। রিউমাটয়েড আর্থ্রাইটিস এর চিকিৎসা কিভাবে করতে হয়?</button>
-      <button class="suggestion-btn" id="sugg5" onclick="sendSuggestion('কিভাবে আমি রিউমাটয়েড আর্থ্রাইটিস নিয়ন্ত্রণ ও জীবনযাত্রার মান উন্নত করতে পারি?', 'sugg5')">৫। কিভাবে আমি রিউমাটয়েড আর্থ্রাইটিস নিয়ন্ত্রণ ও জীবনযাত্রার মান উন্নত করতে পারি?</button>
+  <div class="chat-header">
+    <img class="logo" src="https://raw.githubusercontent.com/mdfakrulislam1990-cmyk/dpl_product-chatbot-Public/main/templates/delta_care.png" alt="Delta Care Logo" onerror="this.style.display='none';">
+    <div class="title-block">
+      <span class="brand">Delta Care</span>
+      <span class="subtitle"><span class="dot"></span> প্রোডাক্ট সহায়ক Agent</span>
     </div>
+  </div>
+  <div class="chat-messages" id="messages">
+    <div class="msg bot">👋 আসসালামু আলাইকুম! আমি আপনাকে প্রোডাক্টের দাম, স্টক ও বিস্তারিত জানাতে সাহায্য করতে পারি। কোন প্রোডাক্ট সম্পর্কে জানতে চান?</div>
   </div>
   <div class="typing" id="typing" style="display:none;">বট লিখছে...</div>
   <div class="chat-input">
-    <input type="text" id="userInput" placeholder="যেমনঃ Ask Anything Like Pyrenol এর দাম কত?" onkeydown="if(event.key==='Enter') sendMessage();">
+    <input type="text" id="userInput" placeholder="যেমনঃ Samsung Galaxy A15 এর দাম কত?" onkeydown="if(event.key==='Enter') sendMessage();">
     <button onclick="sendMessage()">পাঠান</button>
   </div>
 </div>
@@ -166,20 +146,6 @@ e<!DOCTYPE html>
 // কথোপকথনের ইতিহাস ব্রাউজারে রাখা হচ্ছে, যেন বট আগের প্রশ্নের প্রসঙ্গ বুঝতে পারে
 // (যেমন: "ওটার দাম কত?" জিজ্ঞেস করলে "ওটা" বলতে কোন প্রোডাক্ট বোঝাচ্ছে বুঝবে)
 let conversationHistory = [];
-
-function sendSuggestion(question, btnId) {
-  // শুধু যেই প্রশ্নে ক্লিক করা হলো, সেটাকেই disable/grey out করা হচ্ছে
-  // বাকি প্রশ্নগুলো এবং পুরো লিস্ট দৃশ্যমান থাকবে, যাতে কাস্টমার
-  // একটার পর একটা প্রশ্ন দেখে ক্লিক করতে পারে
-  const btn = document.getElementById(btnId);
-  if (btn) {
-    btn.disabled = true;
-    btn.classList.add("suggestion-used");
-  }
-
-  document.getElementById("userInput").value = question;
-  sendMessage();
-}
 
 async function sendMessage() {
   const input = document.getElementById("userInput");
