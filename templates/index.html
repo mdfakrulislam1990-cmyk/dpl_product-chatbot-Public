@@ -1,9 +1,9 @@
-e<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bn">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>প্রোডাক্ট চ্যাটবট</title>
+<title>Delta Care - AI Agent</title>
 <style>
   * { box-sizing: border-box; }
   body {
@@ -27,19 +27,54 @@ e<!DOCTYPE html>
     flex-direction: column;
     overflow: hidden;
   }
+
+  /* ===== হেডার (লোগো + নাম) ===== */
   .chat-header {
     background: #4f46e5;
     color: #fff;
-    padding: 18px 20px;
-    font-size: 18px;
-    font-weight: 600;
+    padding: 12px 18px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
+  }
+  .chat-header img.logo {
+    height: 36px;      /* এখানে সংখ্যা বাড়ালে/কমালে লোগো বড়/ছোট হবে */
+    width: 36px;
+    max-width: 36px;
+    max-height: 36px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: #fff;
+    flex-shrink: 0;
+    display: block;
+  }
+  .chat-header .title-block {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.25;
+    overflow: hidden;
+  }
+  .chat-header .title-block .brand {
+    font-size: 16.5px;
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .chat-header .title-block .subtitle {
+    font-size: 11.5px;
+    font-weight: 400;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    white-space: nowrap;
   }
   .chat-header span.dot {
-    width: 10px; height: 10px; background: #4ade80; border-radius: 50%;
+    width: 8px; height: 8px; background: #4ade80; border-radius: 50%;
+    display: inline-block;
+    flex-shrink: 0;
   }
+  /* ===== হেডার শেষ ===== */
+
   .chat-messages {
     flex: 1;
     padding: 16px;
@@ -130,11 +165,7 @@ e<!DOCTYPE html>
 </head>
 <body>
 
-
- 
 <div class="chat-container">
-
- <div class="chat-container">
   <div class="chat-header">
     <img class="logo" src="https://raw.githubusercontent.com/mdfakrulislam1990-cmyk/dpl_product-chatbot-Public/main/templates/delta_care.png" alt="Delta Care Logo" onerror="this.style.display='none';">
     <div class="title-block">
@@ -142,12 +173,9 @@ e<!DOCTYPE html>
       <span class="subtitle"><span class="dot"></span> প্রোডাক্ট সহায়ক Agent</span>
     </div>
   </div>
- 
- 
- 
- 
- <div class="chat-messages" id="messages">
-    <div class="msg bot">👋 আসসালামু আলাইকুম! আমি Delta Care Agent আমি আপনাকে প্রোডাক্টের দাম, স্টক ও বিস্তারিত জানাতে সাহায্য করতে পারি। কোন প্রোডাক্ট সম্পর্কে জানতে চান?</div>
+
+  <div class="chat-messages" id="messages">
+    <div class="msg bot">👋 আসসালামু আলাইকুম! আমি Delta Care Agent, আমি আপনাকে প্রোডাক্টের দাম, স্টক ও বিস্তারিত জানাতে সাহায্য করতে পারি। কোন প্রোডাক্ট সম্পর্কে জানতে চান?</div>
     <div class="suggestions" id="suggestions">
       <button class="suggestion-btn" id="sugg1" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস কি?', 'sugg1')">১। রিউমাটয়েড আর্থ্রাইটিস কি?</button>
       <button class="suggestion-btn" id="sugg2" onclick="sendSuggestion('রিউমাটয়েড আর্থ্রাইটিস হওয়ার কারনগুলো কি কি?', 'sugg2')">২। রিউমাটয়েড আর্থ্রাইটিস হওয়ার কারনগুলো কি কি?</button>
@@ -164,20 +192,14 @@ e<!DOCTYPE html>
 </div>
 
 <script>
-// কথোপকথনের ইতিহাস ব্রাউজারে রাখা হচ্ছে, যেন বট আগের প্রশ্নের প্রসঙ্গ বুঝতে পারে
-// (যেমন: "ওটার দাম কত?" জিজ্ঞেস করলে "ওটা" বলতে কোন প্রোডাক্ট বোঝাচ্ছে বুঝবে)
 let conversationHistory = [];
 
 function sendSuggestion(question, btnId) {
-  // শুধু যেই প্রশ্নে ক্লিক করা হলো, সেটাকেই disable/grey out করা হচ্ছে
-  // বাকি প্রশ্নগুলো এবং পুরো লিস্ট দৃশ্যমান থাকবে, যাতে কাস্টমার
-  // একটার পর একটা প্রশ্ন দেখে ক্লিক করতে পারে
   const btn = document.getElementById(btnId);
   if (btn) {
     btn.disabled = true;
     btn.classList.add("suggestion-used");
   }
-
   document.getElementById("userInput").value = question;
   sendMessage();
 }
@@ -201,7 +223,6 @@ async function sendMessage() {
     document.getElementById("typing").style.display = "none";
     addMessage(data.reply, "bot");
 
-    // history আপডেট করা হচ্ছে (সর্বোচ্চ শেষ ১০টা মেসেজ রাখা হচ্ছে, খরচ/স্পিড ঠিক রাখতে)
     conversationHistory.push({ role: "user", content: text });
     conversationHistory.push({ role: "assistant", content: data.reply });
     if (conversationHistory.length > 10) {
